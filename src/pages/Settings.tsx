@@ -8,6 +8,17 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/sonner";
 import { User, Mail, Save, Eye, EyeOff, Lock, KeyRound } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Settings() {
   const { user, updatePassword } = useAuth();
@@ -23,6 +34,7 @@ export default function Settings() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const togglePasswordVisibility = (field: string) => {
     switch(field) {
@@ -141,7 +153,40 @@ export default function Settings() {
               </div>
             </div>
             
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-3">
+              <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+                <AlertDialogTrigger asChild>
+                  <Button 
+                    type="button" 
+                    variant="outline"
+                    className="flex items-center gap-2"
+                  >
+                    <KeyRound className="w-4 h-4" />
+                    Redefinir Senha
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Redefinir senha</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Tem certeza que deseja redefinir sua senha? Esta ação exigirá que você confirme sua senha atual antes de definir uma nova.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={() => {
+                        setShowPasswordForm(true);
+                        setIsAlertOpen(false);
+                      }}
+                      style={{ backgroundColor: "#e4ff00", color: "#000000" }}
+                    >
+                      Continuar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
               <Button 
                 type="submit" 
                 disabled={isSaving || name === userProfile.name}
@@ -156,29 +201,18 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <KeyRound className="w-5 h-5" />
-            Redefinir Senha
-          </CardTitle>
-          <CardDescription>
-            Altere sua senha de acesso
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {!showPasswordForm ? (
-            <div className="flex justify-center">
-              <Button 
-                onClick={() => setShowPasswordForm(true)}
-                className="flex items-center gap-2"
-                style={{ backgroundColor: "#e4ff00", color: "#000000" }}
-              >
-                <KeyRound className="w-4 h-4" />
-                Atualizar Senha
-              </Button>
-            </div>
-          ) : (
+      {showPasswordForm && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <KeyRound className="w-5 h-5" />
+              Redefinir Senha
+            </CardTitle>
+            <CardDescription>
+              Altere sua senha de acesso
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
             <form onSubmit={handleUpdatePassword} className="space-y-6">
               {passwordError && (
                 <div className="p-3 bg-red-100 border border-red-300 text-red-800 rounded-md">
@@ -306,9 +340,9 @@ export default function Settings() {
                 </Button>
               </div>
             </form>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 } 
