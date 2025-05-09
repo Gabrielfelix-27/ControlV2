@@ -1,0 +1,11 @@
+{
+  "buildCommand": "npm run build",
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
+  "env": {
+    "VITE_SUPABASE_URL": "https://gyogfvfmsotveacjcckr.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5b2dmdmZtc290dmVhY2pjY2tyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2OTE1MjcsImV4cCI6MjA2MTI2NzUyN30.pVe1___osLxHnWo4dFzbNVRaQtAIOt997FSb2OlGK24"
+  }
+} 
